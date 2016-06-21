@@ -1,0 +1,48 @@
+{
+  "name": "aframe-bmfont-text-component",
+  "version": "0.1.0",
+  "description": "BMFont Text component for A-Frame.",
+  "main": "index.js",
+  "scripts": {
+    "build": "browserify examples/main.js -o examples/build.js",
+    "dev": "budo examples/main.js:build.js --dir examples --port 8000 --live --open",
+    "dist": "webpack index.js dist/aframe-bmfont-text-component.js && webpack -p index.js dist/aframe-bmfont-text-component.min.js",
+    "postpublish": "npm run dist",
+    "preghpages": "npm run build && rm -rf gh-pages && cp -r examples gh-pages",
+    "ghpages": "npm run preghpages && ghpages -p gh-pages",
+    "unboil": "node scripts/unboil.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bryik/aframe-bmfont-text-component.git"
+  },
+  "keywords": [
+    "aframe",
+    "aframe-component",
+    "aframe-vr",
+    "vr",
+    "mozvr",
+    "webvr"
+  ],
+  "author": "Ben Pyrik <ben@wsundine.com>",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/bryik/aframe-bmfont-text-component/issues"
+  },
+  "homepage": "https://github.com/bryik/aframe-bmfont-text-component#readme",
+  "devDependencies": {
+    "aframe": "^0.2.0",
+    "browserify": "^12.0.1",
+    "browserify-css": "^0.8.3",
+    "budo": "^7.1.0",
+    "eslint": "^2.13.1",
+    "ghpages": "0.0.3",
+    "inquirer": "^0.12.0",
+    "shelljs": "^0.6.0",
+    "webpack": "^1.12.9"
+  },
+  "dependencies": {
+    "load-bmfont": "^1.2.3",
+    "three-bmfont-text": "^2.1.0"
+  }
+}

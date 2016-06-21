@@ -1,0 +1,28 @@
+<html>
+  <head>
+    <title>A-Frame BMFont Text Component - Different sizes</title>
+    <script src="../build.js"></script>
+  </head>
+  <body>
+    <a-scene>
+      <a-assets></a-assets>
+
+      <a-entity position="0 0 0"
+                geometry="primitive: box"
+                material="color: #C03546">
+      </a-entity>
+
+      <a-entity position="0 2 2"
+                scale="2 2 2"
+                bmfont-text="text: Hello World; width: 1000">
+      </a-entity>
+
+      <a-entity position="0 2.5 2"
+                scale="0.5 0.5 0.5"
+                bmfont-text="text: Hello World; width: 1000">
+      </a-entity>
+
+      <a-sky color="black"></a-sky>
+    </a-scene>
+  </body>
+</html>
