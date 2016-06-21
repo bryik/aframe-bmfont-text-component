@@ -2,7 +2,7 @@
 
 This component is used for rendering bitmap font text in [A-Frame](https://aframe.io) with specific focus on signed distance field fonts (bitmap fonts that look great regardless of zoom level). 
 
-Basically this wraps [Matt DesLauriers'](https://github.com/mattdesl) [three-bmfont-text](https://github.com/Jam3/three-bmfont-text) and [load-bmfont](https://github.com/Jam3/load-bmfont).
+Basically this component wraps Matt DesLauriers' [three-bmfont-text](https://github.com/Jam3/three-bmfont-text) and [load-bmfont](https://github.com/Jam3/load-bmfont).
 
 ### Properties
 
@@ -16,26 +16,26 @@ Basically this wraps [Matt DesLauriers'](https://github.com/mattdesl) [three-bmf
 |    fntImage   |     path to font image file    | ../fonts/DejaVu-sdf.png |
 |      mode     |       'pre' and 'nowrap'       |           None          |
 
-More details [here](https://github.com/Jam3/three-bmfont-text#usage).
+More details on these properties [here](https://github.com/Jam3/three-bmfont-text#usage).
 
 Explanation of 'mode' property [here](https://github.com/mattdesl/word-wrapper).
 
 ### Fonts and Font Images
 
-More than just a script tag is needed for this component to work. You will also need a 'fnt', font image file, and to pass the paths to these files to the component.
+More than just a script tag is needed for this component to work. You will also need a 'fnt', font image file, and to pass the paths to these files with 'fnt' and 'fntImage' properties.
 
 ```html
 <a-entity bmfont-text="text: Hello World; width: 1000; fnt:../fonts/DejaVu-sdf.fnt; fntImage:../fonts/DejaVu-sdf.png">
 </a-entity>
 ```
 
-Since the path "../fonts/DejaVu-sdf" is set by default, it is possible to avoid declaring these paths explicitly by using the DejaVu font and organizing your project folders to match the defaults.
+Since the paths "../fonts/DejaVu-sdf.fnt" and "../fonts/DejaVu-sdf.png" are set by default, it is possible to avoid declaring them explicitly by using the DejaVu font and organizing your project folders to match the defaults.
 
-It should be possible to use different fonts, but I have yet to try. A guide for generating SDF fonts can be found [here](https://github.com/libgdx/libgdx/wiki/Distance-field-fonts).
+It should be possible to use different fonts, I have yet to try. A guide for generating SDF fonts can be found [here](https://github.com/libgdx/libgdx/wiki/Distance-field-fonts).
 
 ### Usage
 
-The most basic usage is to write some text:
+Write some text:
 
 ```html
 <a-entity bmfont-text="text: Hello World;"></a-entity>
@@ -63,17 +63,17 @@ This component does not make use of all of the features of [three-bmfont-text](h
 
 ### Limitations
 
-Bitmap font rendering limits you to the characters included in the font and font files are much smaller than Unicode. SDF font (in particular) also tends to smooth sharp edges, [there are ways around this](https://lambdacube3d.wordpress.com/2014/11/12/playing-around-with-font-rendering/) but personally I like the smooth look.
+Bitmap font rendering limits you to the characters included in the font (Unicode this is not). SDF font (in particular) tends to smooth sharp edges; [there are ways around this](https://lambdacube3d.wordpress.com/2014/11/12/playing-around-with-font-rendering/).
 
 ### Additional Information
 
-If you are interested in this technique and want to learn more, I recommend reading the documentation for [three-bmfont-text](https://github.com/Jam3/three-bmfont-text). 
+If you are interested in text rendering in WebGL/ThreeJS/A-Frame and want to learn more, I recommend reading the documentation for [three-bmfont-text](https://github.com/Jam3/three-bmfont-text). 
 
 Here are some additional resources:
 
+- ['It’s 2015 and drawing text is still hard (WebGL, ThreeJS)' by Parris Khachi](https://www.eventbrite.com/engineering/its-2015-and-drawing-text-is-still-hard-webgl-threejs/)
 - [Valve's original paper](http://www.valvesoftware.com/publications/2007/SIGGRAPH2007_AlphaTestedMagnification.pdf)
 - ['Hacking with THREE.js' by Matt DesLauriers](http://slides.com/mattdeslauriers/hacking-with-three-js#/13)
-- ['It’s 2015 and drawing text is still hard (WebGL, ThreeJS)' by Parris Khachi](https://www.eventbrite.com/engineering/its-2015-and-drawing-text-is-still-hard-webgl-threejs/)
 
 #### Browser Installation
 
@@ -91,19 +91,4 @@ Install and use by directly including the [browser files](dist):
     <a-entity bmfont-text="exampleProp: exampleVal"></a-entity>
   </a-scene>
 </body>
-```
-
-#### NPM Installation
-
-Install via NPM:
-
-```bash
-npm install aframe-bmfont-text-component
-```
-
-Then register and use.
-
-```js
-require('aframe');
-require('aframe-bmfont-text-component');
 ```
