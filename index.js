@@ -38,6 +38,10 @@ AFRAME.registerComponent('bmfont-text', {
     mode: {
       type: 'string',
       default: 'normal'
+    },
+    color: {
+      type: 'color',
+      default: '#000'
     }
   },
 
@@ -79,7 +83,7 @@ AFRAME.registerComponent('bmfont-text', {
         map: texture,
         side: THREE.DoubleSide,
         transparent: true,
-        color: 'rgb(230, 230, 230)'
+        color: data.color
       }));
 
       var text = new THREE.Mesh(geometry, material);

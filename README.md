@@ -15,6 +15,7 @@ Basically this component wraps Matt DesLauriers' [three-bmfont-text](https://git
 |      fnt      |       path to 'fnt' file       | ../fonts/DejaVu-sdf.fnt |
 |    fntImage   |     path to font image file    | ../fonts/DejaVu-sdf.png |
 |      mode     |       'pre' and 'nowrap'       |         'normal'        |
+|     color     |      by RGB, hex, or name      |           #000          |
 
 More details on these properties [here](https://github.com/Jam3/three-bmfont-text#usage).
 
