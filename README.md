@@ -14,7 +14,7 @@ Basically this component wraps Matt DesLauriers' [three-bmfont-text](https://git
 | letterSpacing |  the letter spacing in pixels  |            0            |
 |      fnt      |       path to 'fnt' file       | ../fonts/DejaVu-sdf.fnt |
 |    fntImage   |     path to font image file    | ../fonts/DejaVu-sdf.png |
-|      mode     |       'pre' and 'nowrap'       |           None          |
+|      mode     |       'pre' and 'nowrap'       |         'normal'        |
 
 More details on these properties [here](https://github.com/Jam3/three-bmfont-text#usage).
 
