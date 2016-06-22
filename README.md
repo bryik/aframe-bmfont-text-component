@@ -31,7 +31,7 @@ More than just a script tag is needed for this component to work. You will also 
 
 Since the paths "../fonts/DejaVu-sdf.fnt" and "../fonts/DejaVu-sdf.png" are set by default, it is possible to avoid declaring them explicitly by using the DejaVu font and organizing your project folders to match the defaults.
 
-It should be possible to use different fonts, I have yet to try. A guide for generating SDF fonts can be found [here](https://github.com/libgdx/libgdx/wiki/Distance-field-fonts).
+It should be possible to use different fonts, but I have yet to try. A guide for generating SDF fonts can be found [here](https://github.com/libgdx/libgdx/wiki/Distance-field-fonts).
 
 ### Usage
 
@@ -88,7 +88,9 @@ Install and use by directly including the [browser files](dist):
 
 <body>
   <a-scene>
-    <a-entity bmfont-text="exampleProp: exampleVal"></a-entity>
+    <a-entity bmfont-text="text: Hello world"></a-entity>
   </a-scene>
 </body>
 ```
+
+Remember to include font files in your project directory!
