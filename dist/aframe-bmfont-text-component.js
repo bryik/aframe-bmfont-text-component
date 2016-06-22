@@ -50,8 +50,8 @@
 	}
 
 	var createText = __webpack_require__(1);
-	var SDFShader = __webpack_require__(17);
-	var fontLoader = __webpack_require__(18);
+	var loadFont = __webpack_require__(17);
+	var SDFShader = __webpack_require__(36);
 
 	/**
 	 * bmfont text component for A-Frame.
@@ -82,7 +82,12 @@
 	      default: '../fonts/DejaVu-sdf.png'
 	    },
 	    mode: {
-	      type: 'string'
+	      type: 'string',
+	      default: 'normal'
+	    },
+	    color: {
+	      type: 'color',
+	      default: '#000'
 	    }
 	  },
 
@@ -96,7 +101,7 @@
 	    var object3D = el.object3D;
 	    var data = this.data;
 
-	    // load up a 'fnt' and texture
+	    // Use fontLoader utility to load 'fnt' and texture
 	    fontLoader({
 	      font: data.fnt,
 	      image: data.fntImage
@@ -107,22 +112,24 @@
 	      texture.needsUpdate = true;
 	      texture.anisotropy = 16;
 
-	      // Create text geometry
-	      var geometry = createText({
+	      var options = {
 	        font: font, // the bitmap font definition
 	        text: data.text, // the string to render
 	        width: data.width,
 	        align: data.left,
 	        letterSpacing: data.letterSpacing,
 	        mode: data.mode
-	      });
+	      };
+
+	      // Create text geometry
+	      var geometry = createText(options);
 
 	      // Use './lib/shaders/sdf' to help build a shader material
 	      var material = new THREE.RawShaderMaterial(SDFShader({
 	        map: texture,
 	        side: THREE.DoubleSide,
 	        transparent: true,
-	        color: 'rgb(230, 230, 230)'
+	        color: data.color
 	      }));
 
 	      var text = new THREE.Mesh(geometry, material);
@@ -137,6 +144,23 @@
 	    }
 	  }
 	});
+
+	/**
+	 * A utility to load a font with bmfont-load
+	 * and a texture with Three.TextureLoader()
+	 */
+	function fontLoader (opt, cb) {
+	  loadFont(opt.font, function (err, font) {
+	    if (err) {
+	      throw err;
+	    }
+
+	    var textureLoader = new THREE.TextureLoader();
+	    textureLoader.load(opt.image, function (texture) {
+	      cb(font, texture);
+	    });
+	  });
+	}
 
 
 /***/ },
@@ -1237,98 +1261,12 @@
 /* 17 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var assign = __webpack_require__(14)
-
-	module.exports = function createSDFShader (opt) {
-	  opt = opt || {}
-	  var opacity = typeof opt.opacity === 'number' ? opt.opacity : 1
-	  var alphaTest = typeof opt.alphaTest === 'number' ? opt.alphaTest : 0.0001
-	  var precision = opt.precision || 'highp'
-	  var color = opt.color
-	  var map = opt.map
-
-	  // remove to satisfy r73
-	  delete opt.map
-	  delete opt.color
-	  delete opt.precision
-	  delete opt.opacity
-
-	  return assign({
-	    uniforms: {
-	      opacity: { type: 'f', value: opacity },
-	      map: { type: 't', value: map || new THREE.Texture() },
-	      color: { type: 'c', value: new THREE.Color(color) }
-	    },
-	    vertexShader: [
-	      'attribute vec2 uv;',
-	      'attribute vec4 position;',
-	      'uniform mat4 projectionMatrix;',
-	      'uniform mat4 modelViewMatrix;',
-	      'varying vec2 vUv;',
-	      'void main() {',
-	      'vUv = uv;',
-	      'gl_Position = projectionMatrix * modelViewMatrix * position;',
-	      '}'
-	    ].join('\n'),
-	    fragmentShader: [
-	      '#ifdef GL_OES_standard_derivatives',
-	      '#extension GL_OES_standard_derivatives : enable',
-	      '#endif',
-	      'precision ' + precision + ' float;',
-	      'uniform float opacity;',
-	      'uniform vec3 color;',
-	      'uniform sampler2D map;',
-	      'varying vec2 vUv;',
-
-	      'float aastep(float value) {',
-	      '  #ifdef GL_OES_standard_derivatives',
-	      '    float afwidth = length(vec2(dFdx(value), dFdy(value))) * 0.70710678118654757;',
-	      '  #else',
-	      '    float afwidth = (1.0 / 32.0) * (1.4142135623730951 / (2.0 * gl_FragCoord.w));',
-	      '  #endif',
-	      '  return smoothstep(0.5 - afwidth, 0.5 + afwidth, value);',
-	      '}',
-
-	      'void main() {',
-	      '  vec4 texColor = texture2D(map, vUv);',
-	      '  float alpha = aastep(texColor.a);',
-	      '  gl_FragColor = vec4(color, opacity * alpha);',
-	      alphaTest === 0
-	        ? ''
-	        : '  if (gl_FragColor.a < ' + alphaTest + ') discard;',
-	      '}'
-	    ].join('\n')
-	  }, opt)
-	}
-
-
-/***/ },
-/* 18 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var loadFont = __webpack_require__(19)
-
-	// A utility to load a font, then a texture
-	module.exports = function (opt, cb) {
-	  loadFont(opt.font, function (err, font) {
-	    if (err) throw err
-	    THREE.ImageUtils.loadTexture(opt.image, undefined, function (tex) {
-	      cb(font, tex)
-	    })
-	  })
-	}
-
-
-/***/ },
-/* 19 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/* WEBPACK VAR INJECTION */(function(Buffer) {var xhr = __webpack_require__(24)
+	/* WEBPACK VAR INJECTION */(function(Buffer) {var xhr = __webpack_require__(22)
 	var noop = function(){}
-	var parseASCII = __webpack_require__(31)
-	var parseXML = __webpack_require__(32)
-	var readBinary = __webpack_require__(35)
-	var isBinaryFormat = __webpack_require__(36)
+	var parseASCII = __webpack_require__(29)
+	var parseXML = __webpack_require__(30)
+	var readBinary = __webpack_require__(33)
+	var isBinaryFormat = __webpack_require__(34)
 	var xtend = __webpack_require__(4)
 
 	var xml2 = (function hasXML2() {
@@ -1420,10 +1358,10 @@
 	    xhr: req
 	  }, opt)
 	}
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(20).Buffer))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(18).Buffer))
 
 /***/ },
-/* 20 */
+/* 18 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function(Buffer, global) {/*!
@@ -1436,9 +1374,9 @@
 
 	'use strict'
 
-	var base64 = __webpack_require__(21)
-	var ieee754 = __webpack_require__(22)
-	var isArray = __webpack_require__(23)
+	var base64 = __webpack_require__(19)
+	var ieee754 = __webpack_require__(20)
+	var isArray = __webpack_require__(21)
 
 	exports.Buffer = Buffer
 	exports.SlowBuffer = SlowBuffer
@@ -2975,10 +2913,10 @@
 	  return i
 	}
 
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(20).Buffer, (function() { return this; }())))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(18).Buffer, (function() { return this; }())))
 
 /***/ },
-/* 21 */
+/* 19 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var lookup = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
@@ -3108,7 +3046,7 @@
 
 
 /***/ },
-/* 22 */
+/* 20 */
 /***/ function(module, exports) {
 
 	exports.read = function (buffer, offset, isLE, mLen, nBytes) {
@@ -3198,7 +3136,7 @@
 
 
 /***/ },
-/* 23 */
+/* 21 */
 /***/ function(module, exports) {
 
 	var toString = {}.toString;
@@ -3209,14 +3147,14 @@
 
 
 /***/ },
-/* 24 */
+/* 22 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
-	var window = __webpack_require__(25)
-	var once = __webpack_require__(26)
-	var isFunction = __webpack_require__(27)
-	var parseHeaders = __webpack_require__(28)
+	var window = __webpack_require__(23)
+	var once = __webpack_require__(24)
+	var isFunction = __webpack_require__(25)
+	var parseHeaders = __webpack_require__(26)
 	var xtend = __webpack_require__(4)
 
 	module.exports = createXHR
@@ -3434,7 +3372,7 @@
 
 
 /***/ },
-/* 25 */
+/* 23 */
 /***/ function(module, exports) {
 
 	/* WEBPACK VAR INJECTION */(function(global) {if (typeof window !== "undefined") {
@@ -3450,7 +3388,7 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
 /***/ },
-/* 26 */
+/* 24 */
 /***/ function(module, exports) {
 
 	module.exports = once
@@ -3475,7 +3413,7 @@
 
 
 /***/ },
-/* 27 */
+/* 25 */
 /***/ function(module, exports) {
 
 	module.exports = isFunction
@@ -3496,11 +3434,11 @@
 
 
 /***/ },
-/* 28 */
+/* 26 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var trim = __webpack_require__(29)
-	  , forEach = __webpack_require__(30)
+	var trim = __webpack_require__(27)
+	  , forEach = __webpack_require__(28)
 	  , isArray = function(arg) {
 	      return Object.prototype.toString.call(arg) === '[object Array]';
 	    }
@@ -3532,7 +3470,7 @@
 	}
 
 /***/ },
-/* 29 */
+/* 27 */
 /***/ function(module, exports) {
 
 	
@@ -3552,10 +3490,10 @@
 
 
 /***/ },
-/* 30 */
+/* 28 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var isFunction = __webpack_require__(27)
+	var isFunction = __webpack_require__(25)
 
 	module.exports = forEach
 
@@ -3604,7 +3542,7 @@
 
 
 /***/ },
-/* 31 */
+/* 29 */
 /***/ function(module, exports) {
 
 	module.exports = function parseBMFontAscii(data) {
@@ -3717,11 +3655,11 @@
 	}
 
 /***/ },
-/* 32 */
+/* 30 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var parseAttributes = __webpack_require__(33)
-	var parseFromString = __webpack_require__(34)
+	var parseAttributes = __webpack_require__(31)
+	var parseFromString = __webpack_require__(32)
 
 	//In some cases element.attribute.nodeName can return
 	//all lowercase values.. so we need to map them to the correct 
@@ -3807,7 +3745,7 @@
 	}
 
 /***/ },
-/* 33 */
+/* 31 */
 /***/ function(module, exports) {
 
 	//Some versions of GlyphDesigner have a typo
@@ -3840,7 +3778,7 @@
 	}
 
 /***/ },
-/* 34 */
+/* 32 */
 /***/ function(module, exports) {
 
 	module.exports = (function xmlparser() {
@@ -3872,7 +3810,7 @@
 	})()
 
 /***/ },
-/* 35 */
+/* 33 */
 /***/ function(module, exports) {
 
 	var HEADER = [66, 77, 70]
@@ -4037,10 +3975,10 @@
 	}
 
 /***/ },
-/* 36 */
+/* 34 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/* WEBPACK VAR INJECTION */(function(Buffer) {var equal = __webpack_require__(37)
+	/* WEBPACK VAR INJECTION */(function(Buffer) {var equal = __webpack_require__(35)
 	var HEADER = new Buffer([66, 77, 70, 3])
 
 	module.exports = function(buf) {
@@ -4048,13 +3986,13 @@
 	    return buf.substring(0, 3) === 'BMF'
 	  return buf.length > 4 && equal(buf.slice(0, 4), HEADER)
 	}
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(20).Buffer))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(18).Buffer))
 
 /***/ },
-/* 37 */
+/* 35 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var Buffer = __webpack_require__(20).Buffer; // for use with browserify
+	var Buffer = __webpack_require__(18).Buffer; // for use with browserify
 
 	module.exports = function (a, b) {
 	    if (!Buffer.isBuffer(a)) return undefined;
@@ -4068,6 +4006,75 @@
 	    
 	    return true;
 	};
+
+
+/***/ },
+/* 36 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var assign = __webpack_require__(14)
+
+	module.exports = function createSDFShader (opt) {
+	  opt = opt || {}
+	  var opacity = typeof opt.opacity === 'number' ? opt.opacity : 1
+	  var alphaTest = typeof opt.alphaTest === 'number' ? opt.alphaTest : 0.0001
+	  var precision = opt.precision || 'highp'
+	  var color = opt.color
+	  var map = opt.map
+
+	  // remove to satisfy r73
+	  delete opt.map
+	  delete opt.color
+	  delete opt.precision
+	  delete opt.opacity
+
+	  return assign({
+	    uniforms: {
+	      opacity: { type: 'f', value: opacity },
+	      map: { type: 't', value: map || new THREE.Texture() },
+	      color: { type: 'c', value: new THREE.Color(color) }
+	    },
+	    vertexShader: [
+	      'attribute vec2 uv;',
+	      'attribute vec4 position;',
+	      'uniform mat4 projectionMatrix;',
+	      'uniform mat4 modelViewMatrix;',
+	      'varying vec2 vUv;',
+	      'void main() {',
+	      'vUv = uv;',
+	      'gl_Position = projectionMatrix * modelViewMatrix * position;',
+	      '}'
+	    ].join('\n'),
+	    fragmentShader: [
+	      '#ifdef GL_OES_standard_derivatives',
+	      '#extension GL_OES_standard_derivatives : enable',
+	      '#endif',
+	      'precision ' + precision + ' float;',
+	      'uniform float opacity;',
+	      'uniform vec3 color;',
+	      'uniform sampler2D map;',
+	      'varying vec2 vUv;',
+
+	      'float aastep(float value) {',
+	      '  #ifdef GL_OES_standard_derivatives',
+	      '    float afwidth = length(vec2(dFdx(value), dFdy(value))) * 0.70710678118654757;',
+	      '  #else',
+	      '    float afwidth = (1.0 / 32.0) * (1.4142135623730951 / (2.0 * gl_FragCoord.w));',
+	      '  #endif',
+	      '  return smoothstep(0.5 - afwidth, 0.5 + afwidth, value);',
+	      '}',
+
+	      'void main() {',
+	      '  vec4 texColor = texture2D(map, vUv);',
+	      '  float alpha = aastep(texColor.a);',
+	      '  gl_FragColor = vec4(color, opacity * alpha);',
+	      alphaTest === 0
+	        ? ''
+	        : '  if (gl_FragColor.a < ' + alphaTest + ') discard;',
+	      '}'
+	    ].join('\n')
+	  }, opt)
+	}
 
 
 /***/ }
