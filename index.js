@@ -4,8 +4,8 @@ if (typeof AFRAME === 'undefined') {
 }
 
 var createText = require('three-bmfont-text');
+var loadFont = require('load-bmfont');
 var SDFShader = require('./lib/shaders/sdf');
-var fontLoader = require('./lib/load');
 
 /**
  * bmfont text component for A-Frame.
@@ -36,7 +36,8 @@ AFRAME.registerComponent('bmfont-text', {
       default: '../fonts/DejaVu-sdf.png'
     },
     mode: {
-      type: 'string'
+      type: 'string',
+      default: 'normal'
     }
   },
 
@@ -50,7 +51,7 @@ AFRAME.registerComponent('bmfont-text', {
     var object3D = el.object3D;
     var data = this.data;
 
-    // load up a 'fnt' and texture
+    // Use fontLoader utility to load 'fnt' and texture
     fontLoader({
       font: data.fnt,
       image: data.fntImage
@@ -61,15 +62,17 @@ AFRAME.registerComponent('bmfont-text', {
       texture.needsUpdate = true;
       texture.anisotropy = 16;
 
-      // Create text geometry
-      var geometry = createText({
+      var options = {
         font: font, // the bitmap font definition
         text: data.text, // the string to render
         width: data.width,
         align: data.left,
         letterSpacing: data.letterSpacing,
         mode: data.mode
-      });
+      };
+
+      // Create text geometry
+      var geometry = createText(options);
 
       // Use './lib/shaders/sdf' to help build a shader material
       var material = new THREE.RawShaderMaterial(SDFShader({
@@ -91,3 +94,20 @@ AFRAME.registerComponent('bmfont-text', {
     }
   }
 });
+
+/**
+ * A utility to load a font with bmfont-load
+ * and a texture with Three.TextureLoader()
+ */
+function fontLoader (opt, cb) {
+  loadFont(opt.font, function (err, font) {
+    if (err) {
+      throw err;
+    }
+
+    var textureLoader = new THREE.TextureLoader();
+    textureLoader.load(opt.image, function (texture) {
+      cb(font, texture);
+    });
+  });
+}
