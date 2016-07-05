@@ -12,27 +12,14 @@ Basically this component wraps Matt DesLauriers' [three-bmfont-text](https://git
 |     width     |      width of the text box     |           None          |
 |     align     |    'left', 'center', 'right'   |           left          |
 | letterSpacing |  the letter spacing in pixels  |            0            |
-|      fnt      |       path to 'fnt' file       | ../fonts/DejaVu-sdf.fnt |
-|    fntImage   |     path to font image file    | ../fonts/DejaVu-sdf.png |
+|      fnt      |       path to 'fnt' file       |   https://cdn.rawgit... |
+|    fntImage   |     path to font image file    |   https://cdn.rawgit... |
 |      mode     |       'pre' and 'nowrap'       |         'normal'        |
 |     color     |      by RGB, hex, or name      |           #000          |
 
 More details on these properties [here](https://github.com/Jam3/three-bmfont-text#usage).
 
 Explanation of 'mode' property [here](https://github.com/mattdesl/word-wrapper).
-
-### Fonts and Font Images
-
-More than just a script tag is needed for this component to work. You will also need a 'fnt', font image file, and to pass the paths to these files with 'fnt' and 'fntImage' properties.
-
-```html
-<a-entity bmfont-text="text: Hello World; width: 1000; fnt:../fonts/DejaVu-sdf.fnt; fntImage:../fonts/DejaVu-sdf.png">
-</a-entity>
-```
-
-Since the paths "../fonts/DejaVu-sdf.fnt" and "../fonts/DejaVu-sdf.png" are set by default, it is possible to avoid declaring them explicitly by using the DejaVu font and organizing your project folders to match the defaults.
-
-It should be possible to use different fonts, but I have yet to try. A guide for generating SDF fonts can be found [here](https://github.com/libgdx/libgdx/wiki/Distance-field-fonts).
 
 ### Usage
 
@@ -57,6 +44,19 @@ Text can be wrapped by specifying width:
 ```
 
 To be honest, I'm not sure what units width uses as it is not specified by three-bmfont-text. You will have to play around a bit.
+
+### Fonts and Font Images
+
+Custom fonts can be specified with 'fnt' and 'fntImage' properties.
+
+```html
+<a-entity bmfont-text="text: Hello World; width: 1000; fnt:../fonts/DejaVu-sdf.fnt; fntImage:../fonts/DejaVu-sdf.png">
+</a-entity>
+```
+
+These default to hosted "DejaVu-sdf.fnt" and "DejaVu-sdf.png" files thanks to RawGit.
+
+It should be possible to use different fonts, but I have yet to try. A guide for generating SDF fonts can be found [here](https://github.com/libgdx/libgdx/wiki/Distance-field-fonts).
 
 ### Advanced Usage
 
@@ -93,5 +93,3 @@ Install and use by directly including the [browser files](dist):
   </a-scene>
 </body>
 ```
-
-Remember to include font files in your project directory!

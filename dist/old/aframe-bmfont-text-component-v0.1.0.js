@@ -75,11 +75,11 @@
 	    },
 	    fnt: {
 	      type: 'string',
-	      default: 'https://cdn.rawgit.com/bryik/aframe-bmfont-text-component/master/assets/DejaVu-sdf.fnt'
+	      default: '../fonts/DejaVu-sdf.fnt'
 	    },
 	    fntImage: {
 	      type: 'string',
-	      default: 'https://cdn.rawgit.com/bryik/aframe-bmfont-text-component/master/assets/DejaVu-sdf.png'
+	      default: '../fonts/DejaVu-sdf.png'
 	    },
 	    mode: {
 	      type: 'string',
@@ -929,7 +929,7 @@
 
 	function setIndex (geometry, data, itemSize, dtype) {
 	  if (typeof itemSize !== 'number') itemSize = 1
-	  if (typeof dtype !== 'string') dtype = 'uint16'
+	  if (typeof dtype !== 'number') dtype = 'uint16'
 
 	  var isR69 = !geometry.index && typeof geometry.setIndex !== 'function'
 	  var attrib = isR69 ? geometry.getAttribute('index') : geometry.index
@@ -942,7 +942,7 @@
 
 	function setAttribute (geometry, key, data, itemSize, dtype) {
 	  if (typeof itemSize !== 'number') itemSize = 3
-	  if (typeof dtype !== 'string') dtype = 'float32'
+	  if (typeof dtype !== 'number') dtype = 'float32'
 	  if (Array.isArray(data) &&
 	    Array.isArray(data[0]) &&
 	    data[0].length !== itemSize) {
