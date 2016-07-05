@@ -29,11 +29,11 @@ AFRAME.registerComponent('bmfont-text', {
     },
     fnt: {
       type: 'string',
-      default: 'https://cdn.rawgit.com/bryik/aframe-bmfont-text-component/master/assets/DejaVu-sdf.fnt'
+      default: 'https://cdn.rawgit.com/bryik/aframe-bmfont-text-component/aa0655cf90f646e12c40ab4708ea90b4686cfb45/assets/DejaVu-sdf.fnt'
     },
     fntImage: {
       type: 'string',
-      default: 'https://cdn.rawgit.com/bryik/aframe-bmfont-text-component/master/assets/DejaVu-sdf.png'
+      default: 'https://cdn.rawgit.com/bryik/aframe-bmfont-text-component/aa0655cf90f646e12c40ab4708ea90b4686cfb45/assets/DejaVu-sdf.png'
     },
     mode: {
       type: 'string',
