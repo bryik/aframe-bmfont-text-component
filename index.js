@@ -70,7 +70,7 @@ AFRAME.registerComponent('bmfont-text', {
         font: font, // the bitmap font definition
         text: data.text, // the string to render
         width: data.width,
-        align: data.left,
+        align: data.align,
         letterSpacing: data.letterSpacing,
         mode: data.mode
       };
