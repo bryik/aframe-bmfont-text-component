@@ -27,6 +27,10 @@ AFRAME.registerComponent('bmfont-text', {
       type: 'number',
       default: 0
     },
+    lineHeight: {
+      type: 'number',
+      default: 38
+    },
     fnt: {
       type: 'string',
       default: 'https://cdn.rawgit.com/bryik/aframe-bmfont-text-component/aa0655cf90f646e12c40ab4708ea90b4686cfb45/assets/DejaVu-sdf.fnt'
@@ -72,6 +76,7 @@ AFRAME.registerComponent('bmfont-text', {
         width: data.width,
         align: data.align,
         letterSpacing: data.letterSpacing,
+        lineHeight: data.lineHeight,
         mode: data.mode
       };
 
