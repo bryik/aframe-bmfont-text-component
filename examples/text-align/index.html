@@ -1,0 +1,36 @@
+<html>
+  <head>
+    <title>A-Frame BMFont Text Component - Line breaks</title>
+    <script src="../build.js"></script>
+  </head>
+  <body>
+    <a-scene>
+      <a-assets></a-assets>
+
+      <a-entity position="0.5 1.8 1.5">
+        <a-entity camera look-controls wasd-controls></a-entity>
+      </a-entity>
+
+      <a-entity position="2 0 -2"
+                geometry="primitive: box"
+                material="color: #C03546">
+      </a-entity>
+
+      <a-entity position="-2 1.5 -0.5"
+                bmfont-text="color: white; align: right;
+                             text:
+To see a World in a Grain of Sand
+
+And a Heaven in a Wild Flower
+
+Hold Infinity in the palm of your hand
+
+And Eternity in an hour.
+
+                      - William Blake">
+      </a-entity>
+
+      <a-sky color="black"></a-sky>
+    </a-scene>
+  </body>
+</html>
