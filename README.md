@@ -93,3 +93,17 @@ Install and use by directly including the [browser files](dist):
   </a-scene>
 </body>
 ```
+
+#### NPM Installation
+
+Install via NPM:
+
+```bash
+npm install aframe-bmfont-text-component
+```
+
+Then register and use.
+
+```js
+require('aframe');
+require('aframe-bmfont-text-component');
