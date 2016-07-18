@@ -102,7 +102,6 @@
 	  update: function (oldData) {
 	    // Entity data
 	    var el = this.el;
-	    var object3D = el.object3D;
 	    var data = this.data;
 
 	    // Use fontLoader utility to load 'fnt' and texture
@@ -145,8 +144,17 @@
 	      // Scale text down
 	      text.scale.multiplyScalar(-0.005);
 
-	      object3D.add(text);
+	      // Register text mesh under entity's object3DMap
+	      el.setObject3D('bmfont-text', text);
 	    }
+	  },
+
+	  /**
+	   * Called when a component is removed (e.g., via removeAttribute).
+	   * Generally undoes all modifications to the entity.
+	   */
+	  remove: function () {
+	    this.el.removeObject3D('bmfont-text');
 	  }
 	});
 
