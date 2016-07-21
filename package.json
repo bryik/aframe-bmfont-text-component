@@ -1,6 +1,6 @@
 {
   "name": "aframe-bmfont-text-component",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "BMFont Text component for A-Frame.",
   "main": "index.js",
   "scripts": {
@@ -48,6 +48,7 @@
   },
   "dependencies": {
     "load-bmfont": "^1.2.3",
+    "object-assign": "^4.1.0",
     "three-bmfont-text": "^2.1.0"
   }
 }
