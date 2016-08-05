@@ -6,16 +6,17 @@ Basically this component wraps Matt DesLauriers' [three-bmfont-text](https://git
 
 ### Properties
 
-|    Property   |           Description          |      Default Value      |
-|:-------------:|:------------------------------:|:-----------------------:|
-|     text      |   the text you want to appear  |           None          |
-|     width     |      width of the text box     |           None          |
-|     align     |    'left', 'center', 'right'   |           left          |
-| letterSpacing |  the letter spacing in pixels  |            0            |
-|      fnt      |       path to 'fnt' file       |   https://cdn.rawgit... |
-|    fntImage   |     path to font image file    |   https://cdn.rawgit... |
-|      mode     |       'pre' and 'nowrap'       |         'normal'        |
-|     color     |      by RGB, hex, or name      |           #000          |
+|    Property   |          Description         |     Default Value     |
+|:-------------:|:----------------------------:|:---------------------:|
+|      text     |  the text you want to appear |          None         |
+|     width     |     width of the text box    |          None         |
+|     align     |   'left', 'center', 'right'  |          left         |
+| letterSpacing | the letter spacing in pixels |           0           |
+|   lineHeight  |   the line height in pixels  |           38          |
+|      fnt      |      path to 'fnt' file      | https://cdn.rawgit... |
+|    fntImage   |    path to font image file   | https://cdn.rawgit... |
+|      mode     |      'pre' and 'nowrap'      |        'normal'       |
+|     color     |     by RGB, hex, or name     |          #000         |
 
 More details on these properties [here](https://github.com/Jam3/three-bmfont-text#usage).
 
@@ -107,3 +108,4 @@ Then register and use.
 ```js
 require('aframe');
 require('aframe-bmfont-text-component');
+```
