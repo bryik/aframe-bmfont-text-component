@@ -57,7 +57,7 @@ Custom fonts can be specified with 'fnt' and 'fntImage' properties.
 
 These default to hosted "DejaVu-sdf.fnt" and "DejaVu-sdf.png" files thanks to RawGit.
 
-A guide for generating SDF fonts can be found [here](https://github.com/libgdx/libgdx/wiki/Distance-field-fonts). I've tried it with [Arial Black](http://i.imgur.com/iWtXHm5.png) and the result was good.
+A guide for generating SDF fonts can be found [here](https://github.com/libgdx/libgdx/wiki/Distance-field-fonts). I tried it with [Arial Black](http://i.imgur.com/iWtXHm5.png) and the result was good.
 
 ### Advanced Usage
 
