@@ -7,6 +7,8 @@ var createText = require('three-bmfont-text');
 var loadFont = require('load-bmfont');
 var SDFShader = require('./lib/shaders/sdf');
 
+require('./extras/text-primitive.js'); // Register experimental text primitive
+
 /**
  * bmfont text component for A-Frame.
  */
@@ -45,7 +47,11 @@ AFRAME.registerComponent('bmfont-text', {
     },
     color: {
       type: 'color',
-      default: '#000'
+      default: 'white'
+    },
+    opacity: {
+      type: 'number',
+      default: '1.0'
     }
   },
 
@@ -87,7 +93,8 @@ AFRAME.registerComponent('bmfont-text', {
         map: texture,
         side: THREE.DoubleSide,
         transparent: true,
-        color: data.color
+        color: data.color,
+        opacity: data.opacity
       }));
 
       var text = new THREE.Mesh(geometry, material);

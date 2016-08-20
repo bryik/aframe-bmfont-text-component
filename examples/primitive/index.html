@@ -1,0 +1,55 @@
+<html>
+  <head>
+    <title>A-Frame BMFont Text Component - Primitive</title>
+    <script src="../build.js"></script>
+    <script src="https://d3js.org/d3.v4.min.js"></script>
+  </head>
+  <body>
+    <a-scene>
+      <a-assets></a-assets>
+
+      <a-entity position="0.5 1.8 1.5">
+        <a-entity camera look-controls wasd-controls></a-entity>
+      </a-entity>
+
+      <a-entity position="0 0 -2"
+                geometry="primitive: box"
+                material="color: #C03546">
+      </a-entity>
+
+      <a-text text="Hello World" position="-1 2.5 -1"></a-text>
+      <a-text text="<a-text text='Hello World'></a-text>" position="-2 2 -1" color='red'></a-text>
+      <a-text id='transparentText' text="Attributes: color, opacity" position="-2 1.5 -1" opacity="1"></a-text>
+
+      <a-sky color="black"></a-sky>
+    </a-scene>
+    <script type="text/javascript">
+      // Infinite loop opacity transition
+      var text = d3.select('#transparentText');
+      fadeOut();
+
+      function fadeOut () {
+        text.transition()
+            .duration(5000)
+            .delay(1000)  // Slight delay before fading out
+            .attrTween('opacity', function() {
+              var start = "1";
+              var end = "0";
+              return d3.interpolate(start, end);
+            })
+            .on('end', fadeIn);
+      }
+
+      function fadeIn () {
+        text.transition()
+            .duration(5000)
+            .attrTween('opacity', function() {
+              var start = "0";
+              var end = "1";
+              return d3.interpolate(start, end);
+            })
+            .on('end', fadeOut);
+      }
+    </script>
+  </body>
+</html>
