@@ -47,7 +47,7 @@ AFRAME.registerComponent('bmfont-text', {
     },
     color: {
       type: 'color',
-      default: 'white'
+      default: '#000'
     },
     opacity: {
       type: 'number',

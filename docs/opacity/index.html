@@ -19,7 +19,7 @@
 
       <a-entity id='text'
                 position="0 2 0"
-                bmfont-text="opacity: 1; text: Hello World;">
+                bmfont-text="opacity: 1; color: white; text: Hello World;">
       </a-entity>
 
       <a-sky color="black"></a-sky>
@@ -34,8 +34,8 @@
             .duration(2000)
             .delay(1000)  // Slight delay before fading out
             .attrTween('bmfont-text', function() {
-              var start = 'opacity: 1; text: Hello World;';
-              var end = 'opacity: 0; text: Hello World;';
+              var start = 'opacity: 1; color: white; text: Hello World;';
+              var end = 'opacity: 0; color: white; text: Hello World;';
               return d3.interpolate(start, end);
             })
             .on('end', fadeIn);
@@ -45,8 +45,8 @@
         text.transition()
             .duration(2000)
             .attrTween('bmfont-text', function() {
-              var start = 'opacity: 0; text: Hello World;';
-              var end = 'opacity: 1; text: Hello World;';
+              var start = 'opacity: 0; color: white; text: Hello World;';
+              var end = 'opacity: 1; color: white; text: Hello World;';
               return d3.interpolate(start, end);
             })
             .on('end', fadeOut);
