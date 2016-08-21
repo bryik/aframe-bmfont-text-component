@@ -81,7 +81,7 @@ AFRAME.registerComponent('bmfont-text', {
     },
     color: {
       type: 'color',
-      default: 'white'
+      default: '#000'
     },
     opacity: {
       type: 'number',
@@ -170,7 +170,7 @@ function fontLoader (opt, cb) {
   });
 }
 
-},{"./extras/text-primitive.js":2,"./lib/shaders/sdf":4,"load-bmfont":22,"three-bmfont-text":32}],4:[function(require,module,exports){
+},{"./extras/text-primitive.js":2,"./lib/shaders/sdf":4,"load-bmfont":22,"three-bmfont-text":31}],4:[function(require,module,exports){
 var assign = require('object-assign')
 
 module.exports = function createSDFShader (opt) {
@@ -70189,22 +70189,26 @@ if (typeof Object.create === 'function') {
 }
 
 },{}],19:[function(require,module,exports){
-/**
- * Determine if an object is Buffer
+/*!
+ * Determine if an object is a Buffer
  *
- * Author:   Feross Aboukhadijeh <feross@feross.org> <http://feross.org>
- * License:  MIT
- *
- * `npm install is-buffer`
+ * @author   Feross Aboukhadijeh <feross@feross.org> <http://feross.org>
+ * @license  MIT
  */
 
+// The _isBuffer check is for Safari 5-7 support, because it's missing
+// Object.prototype.constructor. Remove this eventually
 module.exports = function (obj) {
-  return !!(obj != null &&
-    (obj._isBuffer || // For Safari 5-7 (missing Object.prototype.constructor)
-      (obj.constructor &&
-      typeof obj.constructor.isBuffer === 'function' &&
-      obj.constructor.isBuffer(obj))
-    ))
+  return obj != null && (isBuffer(obj) || isSlowBuffer(obj) || !!obj._isBuffer)
+}
+
+function isBuffer (obj) {
+  return !!obj.constructor && typeof obj.constructor.isBuffer === 'function' && obj.constructor.isBuffer(obj)
+}
+
+// For Node v0.10 support. Remove this eventually.
+function isSlowBuffer (obj) {
+  return typeof obj.readFloatLE === 'function' && typeof obj.slice === 'function' && isBuffer(obj.slice(0, 0))
 }
 
 },{}],20:[function(require,module,exports){
@@ -70515,7 +70519,7 @@ function getAlignType(align) {
     return ALIGN_RIGHT
   return ALIGN_LEFT
 }
-},{"as-number":7,"indexof-property":17,"word-wrapper":37,"xtend":40}],22:[function(require,module,exports){
+},{"as-number":7,"indexof-property":17,"word-wrapper":36,"xtend":39}],22:[function(require,module,exports){
 (function (Buffer){
 var xhr = require('xhr')
 var noop = function(){}
@@ -70615,7 +70619,7 @@ function getBinaryOpts(opt) {
   }, opt)
 }
 }).call(this,require("buffer").Buffer)
-},{"./lib/is-binary":23,"buffer":10,"parse-bmfont-ascii":26,"parse-bmfont-binary":27,"parse-bmfont-xml":28,"xhr":38,"xtend":40}],23:[function(require,module,exports){
+},{"./lib/is-binary":23,"buffer":10,"parse-bmfont-ascii":25,"parse-bmfont-binary":26,"parse-bmfont-xml":27,"xhr":37,"xtend":39}],23:[function(require,module,exports){
 (function (Buffer){
 var equal = require('buffer-equal')
 var HEADER = new Buffer([66, 77, 70, 3])
@@ -70712,27 +70716,6 @@ module.exports = shouldUseNative() ? Object.assign : function (target, source) {
 };
 
 },{}],25:[function(require,module,exports){
-module.exports = once
-
-once.proto = once(function () {
-  Object.defineProperty(Function.prototype, 'once', {
-    value: function () {
-      return once(this)
-    },
-    configurable: true
-  })
-})
-
-function once (fn) {
-  var called = false
-  return function () {
-    if (called) return
-    called = true
-    return fn.apply(this, arguments)
-  }
-}
-
-},{}],26:[function(require,module,exports){
 module.exports = function parseBMFontAscii(data) {
   if (!data)
     throw new Error('no data provided')
@@ -70841,7 +70824,7 @@ function parseIntList(data) {
     return parseInt(val, 10)
   })
 }
-},{}],27:[function(require,module,exports){
+},{}],26:[function(require,module,exports){
 var HEADER = [66, 77, 70]
 
 module.exports = function readBMFontBinary(buf) {
@@ -71002,7 +70985,7 @@ function readNameNT(buf, offset) {
 function readStringNT(buf, offset) {
   return readNameNT(buf, offset).toString('utf8')
 }
-},{}],28:[function(require,module,exports){
+},{}],27:[function(require,module,exports){
 var parseAttributes = require('./parse-attribs')
 var parseFromString = require('xml-parse-from-string')
 
@@ -71088,7 +71071,7 @@ function getAttribList(element) {
 function mapName(nodeName) {
   return NAME_MAP[nodeName.toLowerCase()] || nodeName
 }
-},{"./parse-attribs":29,"xml-parse-from-string":39}],29:[function(require,module,exports){
+},{"./parse-attribs":28,"xml-parse-from-string":38}],28:[function(require,module,exports){
 //Some versions of GlyphDesigner have a typo
 //that causes some bugs with parsing. 
 //Need to confirm with recent version of the software
@@ -71117,7 +71100,7 @@ function parseIntList(data) {
     return parseInt(val, 10)
   })
 }
-},{}],30:[function(require,module,exports){
+},{}],29:[function(require,module,exports){
 var trim = require('trim')
   , forEach = require('for-each')
   , isArray = function(arg) {
@@ -71149,7 +71132,7 @@ module.exports = function (headers) {
 
   return result
 }
-},{"for-each":14,"trim":36}],31:[function(require,module,exports){
+},{"for-each":14,"trim":35}],30:[function(require,module,exports){
 var dtype = require('dtype')
 var anArray = require('an-array')
 var isBuffer = require('is-buffer')
@@ -71192,7 +71175,7 @@ module.exports = function createQuadElements(array, opt) {
     }
     return indices
 }
-},{"an-array":6,"dtype":12,"is-buffer":19}],32:[function(require,module,exports){
+},{"an-array":6,"dtype":12,"is-buffer":19}],31:[function(require,module,exports){
 var createLayout = require('layout-bmfont-text')
 var inherits = require('inherits')
 var createIndices = require('quad-indices')
@@ -71318,7 +71301,7 @@ TextGeometry.prototype.computeBoundingBox = function () {
   utils.computeBox(positions, bbox)
 }
 
-},{"./lib/utils":33,"./lib/vertices":34,"inherits":18,"layout-bmfont-text":21,"object-assign":24,"quad-indices":31,"three-buffer-vertex-data":35}],33:[function(require,module,exports){
+},{"./lib/utils":32,"./lib/vertices":33,"inherits":18,"layout-bmfont-text":21,"object-assign":24,"quad-indices":30,"three-buffer-vertex-data":34}],32:[function(require,module,exports){
 var itemSize = 2
 var box = { min: [0, 0], max: [0, 0] }
 
@@ -71358,7 +71341,7 @@ module.exports.computeSphere = function (positions, output) {
   output.radius = length / 2
 }
 
-},{}],34:[function(require,module,exports){
+},{}],33:[function(require,module,exports){
 module.exports.pages = function pages (glyphs) {
   var pages = new Float32Array(glyphs.length * 4 * 1)
   var i = 0
@@ -71437,7 +71420,7 @@ module.exports.positions = function positions (glyphs) {
   return positions
 }
 
-},{}],35:[function(require,module,exports){
+},{}],34:[function(require,module,exports){
 var flatten = require('flatten-vertex-data')
 
 module.exports.attr = setAttribute
@@ -71505,7 +71488,7 @@ function rebuildAttribute (attrib, data, itemSize) {
   return false
 }
 
-},{"flatten-vertex-data":13}],36:[function(require,module,exports){
+},{"flatten-vertex-data":13}],35:[function(require,module,exports){
 
 exports = module.exports = trim;
 
@@ -71521,7 +71504,7 @@ exports.right = function(str){
   return str.replace(/\s*$/, '');
 };
 
-},{}],37:[function(require,module,exports){
+},{}],36:[function(require,module,exports){
 var newline = /\n/
 var newlineChar = '\n'
 var whitespace = /\s/
@@ -71649,10 +71632,9 @@ function monospace(text, start, end, width) {
         end: start+glyphs
     }
 }
-},{}],38:[function(require,module,exports){
+},{}],37:[function(require,module,exports){
 "use strict";
 var window = require("global/window")
-var once = require("once")
 var isFunction = require("is-function")
 var parseHeaders = require("parse-headers")
 var xtend = require("xtend")
@@ -71704,11 +71686,17 @@ function createXHR(uri, options, callback) {
 }
 
 function _createXHR(options) {
-    var callback = options.callback
-    if(typeof callback === "undefined"){
+    if(typeof options.callback === "undefined"){
         throw new Error("callback argument missing")
     }
-    callback = once(callback)
+
+    var called = false
+    var callback = function cbOnce(err, response, body){
+        if(!called){
+            called = true
+            options.callback(err, response, body)
+        }
+    }
 
     function readystatechange() {
         if (xhr.readyState === 4) {
@@ -71722,8 +71710,8 @@ function _createXHR(options) {
 
         if (xhr.response) {
             body = xhr.response
-        } else if (xhr.responseType === "text" || !xhr.responseType) {
-            body = xhr.responseText || xhr.responseXML
+        } else {
+            body = xhr.responseText || getXml(xhr)
         }
 
         if (isJson) {
@@ -71750,7 +71738,7 @@ function _createXHR(options) {
             evt = new Error("" + (evt || "Unknown XMLHttpRequest Error") )
         }
         evt.statusCode = 0
-        callback(evt, failureResponse)
+        return callback(evt, failureResponse)
     }
 
     // will load the data & process the response in a special response object
@@ -71782,8 +71770,7 @@ function _createXHR(options) {
         } else {
             err = new Error("Internal XMLHttpRequest Error")
         }
-        callback(err, response, response.body)
-
+        return callback(err, response, response.body)
     }
 
     var xhr = options.xhr || null
@@ -71868,9 +71855,21 @@ function _createXHR(options) {
 
 }
 
+function getXml(xhr) {
+    if (xhr.responseType === "document") {
+        return xhr.responseXML
+    }
+    var firefoxBugTakenEffect = xhr.status === 204 && xhr.responseXML && xhr.responseXML.documentElement.nodeName === "parsererror"
+    if (xhr.responseType === "" && !firefoxBugTakenEffect) {
+        return xhr.responseXML
+    }
+
+    return null
+}
+
 function noop() {}
 
-},{"global/window":15,"is-function":20,"once":25,"parse-headers":30,"xtend":40}],39:[function(require,module,exports){
+},{"global/window":15,"is-function":20,"parse-headers":29,"xtend":39}],38:[function(require,module,exports){
 module.exports = (function xmlparser() {
   //common browsers
   if (typeof window.DOMParser !== 'undefined') {
@@ -71898,7 +71897,7 @@ module.exports = (function xmlparser() {
     return div
   }
 })()
-},{}],40:[function(require,module,exports){
+},{}],39:[function(require,module,exports){
 module.exports = extend
 
 var hasOwnProperty = Object.prototype.hasOwnProperty;
