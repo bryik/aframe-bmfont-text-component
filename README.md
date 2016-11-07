@@ -31,14 +31,6 @@ Write some text:
 <a-entity bmfont-text="text: Hello World;"></a-entity>
 ```
 
-Rather than add the bmfont-text component to a blank entity, you can try using the **text primitive**:
-
-```html
-<a-text text="Hello World;"></a-text>
-```
-
-This is more convenient, but experimental and buggy (e.g. color failing to apply).
-
 To change the size of the text, use the [scale](https://aframe.io/docs/0.2.0/components/scale.html) component or position the text closer or further away.
 
 Text can be wrapped by specifying width, but I'm not sure what units three-bmfont-text uses. You will have to play around a bit.
