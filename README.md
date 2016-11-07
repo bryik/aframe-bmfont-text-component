@@ -1,5 +1,7 @@
 ## aframe-bmfont-text-component
 
+**Works with A-Frame version 0.3.0.**
+
 This component is useful for rendering bitmap and signed distance field font text in [A-Frame](https://aframe.io). Basically, it wraps Matt DesLauriers' [three-bmfont-text](https://github.com/Jam3/three-bmfont-text) and [load-bmfont](https://github.com/Jam3/load-bmfont).
 
 ![screenshot](http://i.imgur.com/pDDlzAX.png)
