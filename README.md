@@ -1,3 +1,7 @@
+**This is an old component!** A-Frame 0.5.0 and up includes SDF text as [a standard component](https://aframe.io/docs/0.5.0/components/text.html). Use that instead!
+
+<hr>
+
 ## aframe-bmfont-text-component
 
 **Works with A-Frame version 0.3.0.**
