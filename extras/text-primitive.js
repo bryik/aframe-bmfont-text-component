@@ -1,6 +1,9 @@
 /* global AFRAME */
 
-/* Experimental text primitive.
+/**
+ * DEPRECATED.
+ *
+ * Experimental text primitive.
  * Issues: color not changing, removeAttribute() not working, mixing primitive with regular entities fails
  * Color issue relates to: https://github.com/donmccurdy/aframe-extras/blob/master/src/primitives/a-ocean.js#L44
  */

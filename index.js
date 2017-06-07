@@ -7,8 +7,6 @@ var createText = require('three-bmfont-text');
 var loadFont = require('load-bmfont');
 var SDFShader = require('./lib/shaders/sdf');
 
-require('./extras/text-primitive.js'); // Register experimental text primitive
-
 /**
  * bmfont text component for A-Frame.
  */
@@ -61,6 +59,7 @@ AFRAME.registerComponent('bmfont-text', {
    */
   update: function (oldData) {
     // Entity data
+    var self = this;
     var el = this.el;
     var data = this.data;
 
@@ -98,6 +97,8 @@ AFRAME.registerComponent('bmfont-text', {
       }));
 
       var text = new THREE.Mesh(geometry, material);
+      // Save mesh so geometry and material can be disposed on remove()
+      self.mesh = text;
 
       // Rotate so text faces the camera
       text.rotation.y = Math.PI;
@@ -115,6 +116,8 @@ AFRAME.registerComponent('bmfont-text', {
    * Generally undoes all modifications to the entity.
    */
   remove: function () {
+    this.mesh.geometry.dispose();
+    this.mesh.material.dispose();
     this.el.removeObject3D('bmfont-text');
   }
 });

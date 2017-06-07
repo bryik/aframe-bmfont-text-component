@@ -1,6 +1,6 @@
 {
   "name": "aframe-bmfont-text-component",
-  "version": "0.1.4",
+  "version": "0.1.5",
   "description": "BMFont Text component for A-Frame.",
   "main": "index.js",
   "scripts": {
@@ -29,7 +29,7 @@
   },
   "homepage": "https://github.com/bryik/aframe-bmfont-text-component#readme",
   "devDependencies": {
-    "aframe": "^0.3.1",
+    "aframe": "^0.5.0",
     "browserify": "^13.1.0",
     "browserify-css": "^0.9.1",
     "budo": "^9.0.0",

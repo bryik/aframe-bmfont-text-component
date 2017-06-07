@@ -42,7 +42,7 @@
 /************************************************************************/
 /******/ ([
 /* 0 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 	/* global AFRAME, THREE */
 	if (typeof AFRAME === 'undefined') {
@@ -50,10 +50,8 @@
 	}
 
 	var createText = __webpack_require__(1);
-	var loadFont = __webpack_require__(17);
-	var SDFShader = __webpack_require__(35);
-
-	__webpack_require__(36); // Register experimental text primitive
+	var loadFont = __webpack_require__(16);
+	var SDFShader = __webpack_require__(34);
 
 	/**
 	 * bmfont text component for A-Frame.
@@ -107,6 +105,7 @@
 	   */
 	  update: function (oldData) {
 	    // Entity data
+	    var self = this;
 	    var el = this.el;
 	    var data = this.data;
 
@@ -144,6 +143,8 @@
 	      }));
 
 	      var text = new THREE.Mesh(geometry, material);
+	      // Save mesh so geometry and material can be disposed on remove()
+	      self.mesh = text;
 
 	      // Rotate so text faces the camera
 	      text.rotation.y = Math.PI;
@@ -161,6 +162,8 @@
 	   * Generally undoes all modifications to the entity.
 	   */
 	  remove: function () {
+	    this.mesh.geometry.dispose();
+	    this.mesh.material.dispose();
 	    this.el.removeObject3D('bmfont-text');
 	  }
 	});
@@ -183,18 +186,18 @@
 	}
 
 
-/***/ },
+/***/ }),
 /* 1 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 	var createLayout = __webpack_require__(2)
-	var inherits = __webpack_require__(7)
-	var createIndices = __webpack_require__(8)
-	var buffer = __webpack_require__(12)
-	var assign = __webpack_require__(14)
+	var inherits = __webpack_require__(6)
+	var createIndices = __webpack_require__(7)
+	var buffer = __webpack_require__(11)
+	var assign = __webpack_require__(13)
 
-	var vertices = __webpack_require__(15)
-	var utils = __webpack_require__(16)
+	var vertices = __webpack_require__(14)
+	var utils = __webpack_require__(15)
 
 	var Base = THREE.BufferGeometry
 
@@ -313,14 +316,13 @@
 	}
 
 
-/***/ },
+/***/ }),
 /* 2 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ (function(module, exports, __webpack_require__) {
 
 	var wordWrap = __webpack_require__(3)
 	var xtend = __webpack_require__(4)
-	var findChar = __webpack_require__(5)('id')
-	var number = __webpack_require__(6)
+	var number = __webpack_require__(5)
 
 	var X_HEIGHTS = ['x', 'e', 'a', 'o', 'n', 's', 'r', 'c', 'u', 'm', 'v', 'w', 'z']
 	var M_WIDTHS = ['m', 'w']
@@ -608,9 +610,19 @@
 	  return ALIGN_LEFT
 	}
 
-/***/ },
+	function findChar (array, value, start) {
+	  start = start || 0
+	  for (var i = start; i < array.length; i++) {
+	    if (array[i].id === value) {
+	      return i
+	    }
+	  }
+	  return -1
+	}
+
+/***/ }),
 /* 3 */
-/***/ function(module, exports) {
+/***/ (function(module, exports) {
 
 	var newline = /\n/
 	var newlineChar = '\n'
@@ -740,9 +752,9 @@
 	    }
 	}
 
-/***/ },
+/***/ }),
 /* 4 */
-/***/ function(module, exports) {
+/***/ (function(module, exports) {
 
 	module.exports = extend
 
@@ -765,26 +777,9 @@
 	}
 
 
-/***/ },
+/***/ }),
 /* 5 */
-/***/ function(module, exports) {
-
-	module.exports = function compile(property) {
-		if (!property || typeof property !== 'string')
-			throw new Error('must specify property for indexof search')
-
-		return new Function('array', 'value', 'start', [
-			'start = start || 0',
-			'for (var i=start; i<array.length; i++)',
-			'  if (array[i]["' + property +'"] === value)',
-			'      return i',
-			'return -1'
-		].join('\n'))
-	}
-
-/***/ },
-/* 6 */
-/***/ function(module, exports) {
+/***/ (function(module, exports) {
 
 	module.exports = function numtype(num, def) {
 		return typeof num === 'number'
@@ -792,9 +787,9 @@
 			: (typeof def === 'number' ? def : 0)
 	}
 
-/***/ },
-/* 7 */
-/***/ function(module, exports) {
+/***/ }),
+/* 6 */
+/***/ (function(module, exports) {
 
 	if (typeof Object.create === 'function') {
 	  // implementation from standard node.js 'util' module
@@ -821,13 +816,13 @@
 	}
 
 
-/***/ },
-/* 8 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ }),
+/* 7 */
+/***/ (function(module, exports, __webpack_require__) {
 
-	var dtype = __webpack_require__(9)
-	var anArray = __webpack_require__(10)
-	var isBuffer = __webpack_require__(11)
+	var dtype = __webpack_require__(8)
+	var anArray = __webpack_require__(9)
+	var isBuffer = __webpack_require__(10)
 
 	var CW = [0, 2, 3]
 	var CCW = [2, 1, 3]
@@ -868,9 +863,9 @@
 	    return indices
 	}
 
-/***/ },
-/* 9 */
-/***/ function(module, exports) {
+/***/ }),
+/* 8 */
+/***/ (function(module, exports) {
 
 	module.exports = function(dtype) {
 	  switch (dtype) {
@@ -898,9 +893,9 @@
 	}
 
 
-/***/ },
-/* 10 */
-/***/ function(module, exports) {
+/***/ }),
+/* 9 */
+/***/ (function(module, exports) {
 
 	var str = Object.prototype.toString
 
@@ -915,9 +910,9 @@
 	}
 
 
-/***/ },
-/* 11 */
-/***/ function(module, exports) {
+/***/ }),
+/* 10 */
+/***/ (function(module, exports) {
 
 	/*!
 	 * Determine if an object is a Buffer
@@ -942,11 +937,12 @@
 	}
 
 
-/***/ },
-/* 12 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ }),
+/* 11 */
+/***/ (function(module, exports, __webpack_require__) {
 
-	var flatten = __webpack_require__(13)
+	var flatten = __webpack_require__(12)
+	var warned = false;
 
 	module.exports.attr = setAttribute
 	module.exports.index = setIndex
@@ -986,8 +982,39 @@
 	  if (!attrib || rebuildAttribute(attrib, data, itemSize)) {
 	    // create a new array with desired type
 	    data = flatten(data, dtype)
-	    attrib = new THREE.BufferAttribute(data, itemSize)
+
+	    var needsNewBuffer = attrib && typeof attrib.setArray !== 'function'
+	    if (!attrib || needsNewBuffer) {
+	      // We are on an old version of ThreeJS which can't
+	      // support growing / shrinking buffers, so we need
+	      // to build a new buffer
+	      if (needsNewBuffer && !warned) {
+	        warned = true
+	        console.warn([
+	          'A WebGL buffer is being updated with a new size or itemSize, ',
+	          'however this version of ThreeJS only supports fixed-size buffers.',
+	          '\nThe old buffer may still be kept in memory.\n',
+	          'To avoid memory leaks, it is recommended that you dispose ',
+	          'your geometries and create new ones, or update to ThreeJS r82 or newer.\n',
+	          'See here for discussion:\n',
+	          'https://github.com/mrdoob/three.js/pull/9631'
+	        ].join(''))
+	      }
+
+	      // Build a new attribute
+	      attrib = new THREE.BufferAttribute(data, itemSize);
+	    }
+
+	    attrib.itemSize = itemSize
 	    attrib.needsUpdate = true
+
+	    // New versions of ThreeJS suggest using setArray
+	    // to change the data. It will use bufferData internally,
+	    // so you can change the array size without any issues
+	    if (typeof attrib.setArray === 'function') {
+	      attrib.setArray(data)
+	    }
+
 	    return attrib
 	  } else {
 	    // copy data into the existing array
@@ -1014,12 +1041,12 @@
 	}
 
 
-/***/ },
-/* 13 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ }),
+/* 12 */
+/***/ (function(module, exports, __webpack_require__) {
 
 	/*eslint new-cap:0*/
-	var dtype = __webpack_require__(9)
+	var dtype = __webpack_require__(8)
 	module.exports = flattenVertexData
 	function flattenVertexData (data, output, offset) {
 	  if (!data) throw new TypeError('must specify data as first parameter')
@@ -1065,12 +1092,19 @@
 	}
 
 
-/***/ },
-/* 14 */
-/***/ function(module, exports) {
+/***/ }),
+/* 13 */
+/***/ (function(module, exports) {
+
+	/*
+	object-assign
+	(c) Sindre Sorhus
+	@license MIT
+	*/
 
 	'use strict';
 	/* eslint-disable no-unused-vars */
+	var getOwnPropertySymbols = Object.getOwnPropertySymbols;
 	var hasOwnProperty = Object.prototype.hasOwnProperty;
 	var propIsEnumerable = Object.prototype.propertyIsEnumerable;
 
@@ -1091,7 +1125,7 @@
 			// Detect buggy property enumeration order in older V8 versions.
 
 			// https://bugs.chromium.org/p/v8/issues/detail?id=4118
-			var test1 = new String('abc');  // eslint-disable-line
+			var test1 = new String('abc');  // eslint-disable-line no-new-wrappers
 			test1[5] = 'de';
 			if (Object.getOwnPropertyNames(test1)[0] === '5') {
 				return false;
@@ -1120,7 +1154,7 @@
 			}
 
 			return true;
-		} catch (e) {
+		} catch (err) {
 			// We don't expect any of the above to throw, but better to be safe.
 			return false;
 		}
@@ -1140,8 +1174,8 @@
 				}
 			}
 
-			if (Object.getOwnPropertySymbols) {
-				symbols = Object.getOwnPropertySymbols(from);
+			if (getOwnPropertySymbols) {
+				symbols = getOwnPropertySymbols(from);
 				for (var i = 0; i < symbols.length; i++) {
 					if (propIsEnumerable.call(from, symbols[i])) {
 						to[symbols[i]] = from[symbols[i]];
@@ -1154,9 +1188,9 @@
 	};
 
 
-/***/ },
-/* 15 */
-/***/ function(module, exports) {
+/***/ }),
+/* 14 */
+/***/ (function(module, exports) {
 
 	module.exports.pages = function pages (glyphs) {
 	  var pages = new Float32Array(glyphs.length * 4 * 1)
@@ -1237,9 +1271,9 @@
 	}
 
 
-/***/ },
-/* 16 */
-/***/ function(module, exports) {
+/***/ }),
+/* 15 */
+/***/ (function(module, exports) {
 
 	var itemSize = 2
 	var box = { min: [0, 0], max: [0, 0] }
@@ -1281,20 +1315,20 @@
 	}
 
 
-/***/ },
-/* 17 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ }),
+/* 16 */
+/***/ (function(module, exports, __webpack_require__) {
 
-	/* WEBPACK VAR INJECTION */(function(Buffer) {var xhr = __webpack_require__(22)
+	/* WEBPACK VAR INJECTION */(function(Buffer) {var xhr = __webpack_require__(21)
 	var noop = function(){}
-	var parseASCII = __webpack_require__(28)
-	var parseXML = __webpack_require__(29)
-	var readBinary = __webpack_require__(32)
-	var isBinaryFormat = __webpack_require__(33)
+	var parseASCII = __webpack_require__(27)
+	var parseXML = __webpack_require__(28)
+	var readBinary = __webpack_require__(31)
+	var isBinaryFormat = __webpack_require__(32)
 	var xtend = __webpack_require__(4)
 
 	var xml2 = (function hasXML2() {
-	  return window.XMLHttpRequest && "withCredentials" in new XMLHttpRequest
+	  return self.XMLHttpRequest && "withCredentials" in new XMLHttpRequest
 	})()
 
 	module.exports = function(opt, cb) {
@@ -1372,23 +1406,24 @@
 	  if (xml2)
 	    return xtend(opt, { responseType: 'arraybuffer' })
 	  
-	  if (typeof window.XMLHttpRequest === 'undefined')
+	  if (typeof self.XMLHttpRequest === 'undefined')
 	    throw new Error('your browser does not support XHR loading')
 
 	  //IE9 and XML1 browsers could still use an override
-	  var req = new window.XMLHttpRequest()
+	  var req = new self.XMLHttpRequest()
 	  req.overrideMimeType('text/plain; charset=x-user-defined')
 	  return xtend({
 	    xhr: req
 	  }, opt)
 	}
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(18).Buffer))
 
-/***/ },
-/* 18 */
-/***/ function(module, exports, __webpack_require__) {
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(17).Buffer))
 
-	/* WEBPACK VAR INJECTION */(function(Buffer, global) {/*!
+/***/ }),
+/* 17 */
+/***/ (function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function(global) {/*!
 	 * The buffer module from node.js, for the browser.
 	 *
 	 * @author   Feross Aboukhadijeh <feross@feross.org> <http://feross.org>
@@ -1398,9 +1433,9 @@
 
 	'use strict'
 
-	var base64 = __webpack_require__(19)
-	var ieee754 = __webpack_require__(20)
-	var isArray = __webpack_require__(21)
+	var base64 = __webpack_require__(18)
+	var ieee754 = __webpack_require__(19)
+	var isArray = __webpack_require__(20)
 
 	exports.Buffer = Buffer
 	exports.SlowBuffer = SlowBuffer
@@ -3178,14 +3213,15 @@
 	  return val !== val // eslint-disable-line no-self-compare
 	}
 
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(18).Buffer, (function() { return this; }())))
+	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
-/***/ },
-/* 19 */
-/***/ function(module, exports) {
+/***/ }),
+/* 18 */
+/***/ (function(module, exports) {
 
 	'use strict'
 
+	exports.byteLength = byteLength
 	exports.toByteArray = toByteArray
 	exports.fromByteArray = fromByteArray
 
@@ -3193,23 +3229,17 @@
 	var revLookup = []
 	var Arr = typeof Uint8Array !== 'undefined' ? Uint8Array : Array
 
-	function init () {
-	  var code = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/'
-	  for (var i = 0, len = code.length; i < len; ++i) {
-	    lookup[i] = code[i]
-	    revLookup[code.charCodeAt(i)] = i
-	  }
-
-	  revLookup['-'.charCodeAt(0)] = 62
-	  revLookup['_'.charCodeAt(0)] = 63
+	var code = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/'
+	for (var i = 0, len = code.length; i < len; ++i) {
+	  lookup[i] = code[i]
+	  revLookup[code.charCodeAt(i)] = i
 	}
 
-	init()
+	revLookup['-'.charCodeAt(0)] = 62
+	revLookup['_'.charCodeAt(0)] = 63
 
-	function toByteArray (b64) {
-	  var i, j, l, tmp, placeHolders, arr
+	function placeHoldersCount (b64) {
 	  var len = b64.length
-
 	  if (len % 4 > 0) {
 	    throw new Error('Invalid string. Length must be a multiple of 4')
 	  }
@@ -3219,9 +3249,19 @@
 	  // represent one byte
 	  // if there is only one, then the three characters before it represent 2 bytes
 	  // this is just a cheap hack to not do indexOf twice
-	  placeHolders = b64[len - 2] === '=' ? 2 : b64[len - 1] === '=' ? 1 : 0
+	  return b64[len - 2] === '=' ? 2 : b64[len - 1] === '=' ? 1 : 0
+	}
 
+	function byteLength (b64) {
 	  // base64 is 4/3 + up to two characters of the original data
+	  return b64.length * 3 / 4 - placeHoldersCount(b64)
+	}
+
+	function toByteArray (b64) {
+	  var i, j, l, tmp, placeHolders, arr
+	  var len = b64.length
+	  placeHolders = placeHoldersCount(b64)
+
 	  arr = new Arr(len * 3 / 4 - placeHolders)
 
 	  // if there are placeholders, only get up to the last complete 4 chars
@@ -3295,9 +3335,9 @@
 	}
 
 
-/***/ },
-/* 20 */
-/***/ function(module, exports) {
+/***/ }),
+/* 19 */
+/***/ (function(module, exports) {
 
 	exports.read = function (buffer, offset, isLE, mLen, nBytes) {
 	  var e, m
@@ -3385,9 +3425,9 @@
 	}
 
 
-/***/ },
-/* 21 */
-/***/ function(module, exports) {
+/***/ }),
+/* 20 */
+/***/ (function(module, exports) {
 
 	var toString = {}.toString;
 
@@ -3396,14 +3436,14 @@
 	};
 
 
-/***/ },
-/* 22 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ }),
+/* 21 */
+/***/ (function(module, exports, __webpack_require__) {
 
 	"use strict";
-	var window = __webpack_require__(23)
-	var isFunction = __webpack_require__(24)
-	var parseHeaders = __webpack_require__(25)
+	var window = __webpack_require__(22)
+	var isFunction = __webpack_require__(23)
+	var parseHeaders = __webpack_require__(24)
 	var xtend = __webpack_require__(4)
 
 	module.exports = createXHR
@@ -3467,7 +3507,7 @@
 
 	    function readystatechange() {
 	        if (xhr.readyState === 4) {
-	            loadFunc()
+	            setTimeout(loadFunc, 0)
 	        }
 	    }
 
@@ -3489,15 +3529,6 @@
 
 	        return body
 	    }
-
-	    var failureResponse = {
-	                body: undefined,
-	                headers: {},
-	                statusCode: 0,
-	                method: method,
-	                url: uri,
-	                rawRequest: xhr
-	            }
 
 	    function errorFunc(evt) {
 	        clearTimeout(timeoutTimer)
@@ -3554,18 +3585,26 @@
 	    var aborted
 	    var uri = xhr.url = options.uri || options.url
 	    var method = xhr.method = options.method || "GET"
-	    var body = options.body || options.data || null
+	    var body = options.body || options.data
 	    var headers = xhr.headers = options.headers || {}
 	    var sync = !!options.sync
 	    var isJson = false
 	    var timeoutTimer
+	    var failureResponse = {
+	        body: undefined,
+	        headers: {},
+	        statusCode: 0,
+	        method: method,
+	        url: uri,
+	        rawRequest: xhr
+	    }
 
-	    if ("json" in options) {
+	    if ("json" in options && options.json !== false) {
 	        isJson = true
 	        headers["accept"] || headers["Accept"] || (headers["Accept"] = "application/json") //Don't override existing accept header declared by user
 	        if (method !== "GET" && method !== "HEAD") {
 	            headers["content-type"] || headers["Content-Type"] || (headers["Content-Type"] = "application/json") //Don't override existing accept header declared by user
-	            body = JSON.stringify(options.json)
+	            body = JSON.stringify(options.json === true ? body : options.json)
 	        }
 	    }
 
@@ -3575,6 +3614,9 @@
 	    // IE9 must have onprogress be set to a unique function.
 	    xhr.onprogress = function () {
 	        // IE must die
+	    }
+	    xhr.onabort = function(){
+	        aborted = true;
 	    }
 	    xhr.ontimeout = errorFunc
 	    xhr.open(method, uri, !sync, options.username, options.password)
@@ -3587,7 +3629,8 @@
 	    // both npm's request and jquery 1.x use this kind of timeout, so this is being consistent
 	    if (!sync && options.timeout > 0 ) {
 	        timeoutTimer = setTimeout(function(){
-	            aborted=true//IE9 may still call readystatechange
+	            if (aborted) return
+	            aborted = true//IE9 may still call readystatechange
 	            xhr.abort("timeout")
 	            var e = new Error("XMLHttpRequest timeout")
 	            e.code = "ETIMEDOUT"
@@ -3615,7 +3658,10 @@
 	        options.beforeSend(xhr)
 	    }
 
-	    xhr.send(body)
+	    // Microsoft Edge browser sends "undefined" when send is called with undefined value.
+	    // XMLHttpRequest spec says to pass null as body to indicate no body
+	    // See https://github.com/naugtur/xhr/issues/100.
+	    xhr.send(body || null)
 
 	    return xhr
 
@@ -3626,7 +3672,7 @@
 	    if (xhr.responseType === "document") {
 	        return xhr.responseXML
 	    }
-	    var firefoxBugTakenEffect = xhr.status === 204 && xhr.responseXML && xhr.responseXML.documentElement.nodeName === "parsererror"
+	    var firefoxBugTakenEffect = xhr.responseXML && xhr.responseXML.documentElement.nodeName === "parsererror"
 	    if (xhr.responseType === "" && !firefoxBugTakenEffect) {
 	        return xhr.responseXML
 	    }
@@ -3637,25 +3683,29 @@
 	function noop() {}
 
 
-/***/ },
-/* 23 */
-/***/ function(module, exports) {
+/***/ }),
+/* 22 */
+/***/ (function(module, exports) {
 
-	/* WEBPACK VAR INJECTION */(function(global) {if (typeof window !== "undefined") {
-	    module.exports = window;
+	/* WEBPACK VAR INJECTION */(function(global) {var win;
+
+	if (typeof window !== "undefined") {
+	    win = window;
 	} else if (typeof global !== "undefined") {
-	    module.exports = global;
+	    win = global;
 	} else if (typeof self !== "undefined"){
-	    module.exports = self;
+	    win = self;
 	} else {
-	    module.exports = {};
+	    win = {};
 	}
+
+	module.exports = win;
 
 	/* WEBPACK VAR INJECTION */}.call(exports, (function() { return this; }())))
 
-/***/ },
-/* 24 */
-/***/ function(module, exports) {
+/***/ }),
+/* 23 */
+/***/ (function(module, exports) {
 
 	module.exports = isFunction
 
@@ -3674,12 +3724,12 @@
 	};
 
 
-/***/ },
-/* 25 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ }),
+/* 24 */
+/***/ (function(module, exports, __webpack_require__) {
 
-	var trim = __webpack_require__(26)
-	  , forEach = __webpack_require__(27)
+	var trim = __webpack_require__(25)
+	  , forEach = __webpack_require__(26)
 	  , isArray = function(arg) {
 	      return Object.prototype.toString.call(arg) === '[object Array]';
 	    }
@@ -3710,9 +3760,9 @@
 	  return result
 	}
 
-/***/ },
-/* 26 */
-/***/ function(module, exports) {
+/***/ }),
+/* 25 */
+/***/ (function(module, exports) {
 
 	
 	exports = module.exports = trim;
@@ -3730,11 +3780,11 @@
 	};
 
 
-/***/ },
-/* 27 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ }),
+/* 26 */
+/***/ (function(module, exports, __webpack_require__) {
 
-	var isFunction = __webpack_require__(24)
+	var isFunction = __webpack_require__(23)
 
 	module.exports = forEach
 
@@ -3782,9 +3832,9 @@
 	}
 
 
-/***/ },
-/* 28 */
-/***/ function(module, exports) {
+/***/ }),
+/* 27 */
+/***/ (function(module, exports) {
 
 	module.exports = function parseBMFontAscii(data) {
 	  if (!data)
@@ -3895,12 +3945,12 @@
 	  })
 	}
 
-/***/ },
-/* 29 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ }),
+/* 28 */
+/***/ (function(module, exports, __webpack_require__) {
 
-	var parseAttributes = __webpack_require__(30)
-	var parseFromString = __webpack_require__(31)
+	var parseAttributes = __webpack_require__(29)
+	var parseFromString = __webpack_require__(30)
 
 	//In some cases element.attribute.nodeName can return
 	//all lowercase values.. so we need to map them to the correct 
@@ -3985,9 +4035,9 @@
 	  return NAME_MAP[nodeName.toLowerCase()] || nodeName
 	}
 
-/***/ },
-/* 30 */
-/***/ function(module, exports) {
+/***/ }),
+/* 29 */
+/***/ (function(module, exports) {
 
 	//Some versions of GlyphDesigner have a typo
 	//that causes some bugs with parsing. 
@@ -4018,24 +4068,24 @@
 	  })
 	}
 
-/***/ },
-/* 31 */
-/***/ function(module, exports) {
+/***/ }),
+/* 30 */
+/***/ (function(module, exports) {
 
 	module.exports = (function xmlparser() {
 	  //common browsers
-	  if (typeof window.DOMParser !== 'undefined') {
+	  if (typeof self.DOMParser !== 'undefined') {
 	    return function(str) {
-	      var parser = new window.DOMParser()
+	      var parser = new self.DOMParser()
 	      return parser.parseFromString(str, 'application/xml')
 	    }
 	  } 
 
 	  //IE8 fallback
-	  if (typeof window.ActiveXObject !== 'undefined'
-	      && new window.ActiveXObject('Microsoft.XMLDOM')) {
+	  if (typeof self.ActiveXObject !== 'undefined'
+	      && new self.ActiveXObject('Microsoft.XMLDOM')) {
 	    return function(str) {
-	      var xmlDoc = new window.ActiveXObject("Microsoft.XMLDOM")
+	      var xmlDoc = new self.ActiveXObject("Microsoft.XMLDOM")
 	      xmlDoc.async = "false"
 	      xmlDoc.loadXML(str)
 	      return xmlDoc
@@ -4050,9 +4100,10 @@
 	  }
 	})()
 
-/***/ },
-/* 32 */
-/***/ function(module, exports) {
+
+/***/ }),
+/* 31 */
+/***/ (function(module, exports) {
 
 	var HEADER = [66, 77, 70]
 
@@ -4215,11 +4266,11 @@
 	  return readNameNT(buf, offset).toString('utf8')
 	}
 
-/***/ },
-/* 33 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ }),
+/* 32 */
+/***/ (function(module, exports, __webpack_require__) {
 
-	/* WEBPACK VAR INJECTION */(function(Buffer) {var equal = __webpack_require__(34)
+	/* WEBPACK VAR INJECTION */(function(Buffer) {var equal = __webpack_require__(33)
 	var HEADER = new Buffer([66, 77, 70, 3])
 
 	module.exports = function(buf) {
@@ -4227,13 +4278,13 @@
 	    return buf.substring(0, 3) === 'BMF'
 	  return buf.length > 4 && equal(buf.slice(0, 4), HEADER)
 	}
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(18).Buffer))
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(17).Buffer))
 
-/***/ },
-/* 34 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ }),
+/* 33 */
+/***/ (function(module, exports, __webpack_require__) {
 
-	var Buffer = __webpack_require__(18).Buffer; // for use with browserify
+	var Buffer = __webpack_require__(17).Buffer; // for use with browserify
 
 	module.exports = function (a, b) {
 	    if (!Buffer.isBuffer(a)) return undefined;
@@ -4249,11 +4300,11 @@
 	};
 
 
-/***/ },
-/* 35 */
-/***/ function(module, exports, __webpack_require__) {
+/***/ }),
+/* 34 */
+/***/ (function(module, exports, __webpack_require__) {
 
-	var assign = __webpack_require__(14)
+	var assign = __webpack_require__(13)
 
 	module.exports = function createSDFShader (opt) {
 	  opt = opt || {}
@@ -4318,38 +4369,5 @@
 	}
 
 
-/***/ },
-/* 36 */
-/***/ function(module, exports) {
-
-	/* global AFRAME */
-
-	/* Experimental text primitive.
-	 * Issues: color not changing, removeAttribute() not working, mixing primitive with regular entities fails
-	 * Color issue relates to: https://github.com/donmccurdy/aframe-extras/blob/master/src/primitives/a-ocean.js#L44
-	 */
-
-	var extendDeep = AFRAME.utils.extendDeep;
-	var meshMixin = AFRAME.primitives.getMeshMixin();
-
-	AFRAME.registerPrimitive('a-text', extendDeep({}, meshMixin, {
-	  defaultComponents: {
-	    'bmfont-text': {}
-	  },
-	  mappings: {
-	    text: 'bmfont-text.text',
-	    width: 'bmfont-text.width',
-	    align: 'bmfont-text.align',
-	    letterSpacing: 'bmfont-text.letterSpacing',
-	    lineHeight: 'bmfont-text.lineHeight',
-	    fnt: 'bmfont-text.fnt',
-	    fntImage: 'bmfont-text.fntImage',
-	    mode: 'bmfont-text.mode',
-	    color: 'bmfont-text.color',
-	    opacity: 'bmfont-text.opacity'
-	  }
-	}));
-
-
-/***/ }
+/***/ })
 /******/ ]);
