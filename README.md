@@ -52,7 +52,7 @@ Different fonts can be specified with the 'fnt' and 'fntImage' properties.
 </a-entity>
 ```
 
-Thanks to [RawGit](http://rawgit.com/), these default to hosted "DejaVu-sdf.fnt" and "DejaVu-sdf.png" files.
+Thanks to [jsDelivr](https://www.jsdelivr.com), these default to hosted "DejaVu-sdf.fnt" and "DejaVu-sdf.png" files.
 
 ## Limitations
 
